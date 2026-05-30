@@ -3,7 +3,7 @@ import * as translations from "./translations.js";
 
 let _CONFIG = {
     lang: null,
-    version: 7,
+    version: 10,
     checkBoxes: {
         chooseSavedir: false,
         loadFullPlaylist: false,
@@ -16,7 +16,7 @@ let _CONFIG = {
         passCookies: false
     },
     fields: {
-        maxQuality: "1080",
+        maxQuality: "2160",
         restartAttempts: "5",
         playlistItems: "",
         proxyParam: ""
@@ -25,43 +25,89 @@ let _CONFIG = {
 let _config = window.localStorage.getItem("config");
 if (_config) {
     _config = JSON.parse(_config);
-    if (("version" in _config) && (_config.version >= _CONFIG.version)) {
-        _CONFIG = _config;
+    if ("checkBoxes" in _config) {
+        _CONFIG.checkBoxes = {..._CONFIG.checkBoxes, ..._config.checkBoxes};
     };
+    if ("fields" in _config) {
+        _CONFIG.fields = {..._CONFIG.fields, ..._config.fields};
+    };
+    if (("lang" in _config) && (_config.lang in translations)) {
+        _CONFIG.lang = _config.lang;
+    };
+    if (((!("version" in _config)) || (_config.version < 9)) && (_CONFIG.fields.maxQuality == "1080")) {
+        _CONFIG.fields.maxQuality = "2160";
+    };
+    window.localStorage.setItem("config", JSON.stringify(_CONFIG));
 };
 
 
 function setLang() {
 
-    let lang = _CONFIG.lang;
-    if (lang === null) {
-        const localeObject = new Intl.Locale(navigator.language);
-        lang = localeObject.language;
-        if (!(lang in translations)) {
-            lang = "en";
-        };
-        _CONFIG.lang = lang;
-        window.localStorage.setItem("config", JSON.stringify(_CONFIG));
+    let browserLanguage = navigator.language;
+    if ((typeof chrome !== "undefined") && chrome.i18n && chrome.i18n.getUILanguage) {
+        browserLanguage = chrome.i18n.getUILanguage();
     };
+
+    let lang = _CONFIG.lang;
+    if ((!lang) && browserLanguage) {
+        lang = new Intl.Locale(browserLanguage).language;
+    };
+    if (!(lang in translations)) {
+        lang = "ru";
+    };
+
+    document.documentElement.lang = lang;
+
+    document.title = translations[lang].main_title;
 
     let element;
     for (let key in translations[lang]) {
         element = document.getElementById(key);
         if (element) {
-            element.innerHTML = translations[lang][key];
+            element.textContent = translations[lang][key];
         };
+    };
+
+    for (const [elementId, titleKey] of [
+        ["useSponsorBlockInfo", "useSponsorBlockTitle"],
+        ["playlistItemsInfo", "playlistItemsTitle"]
+    ]) {
+        const infoElement = document.getElementById(elementId);
+        const title = translations[lang][titleKey];
+        if (infoElement && title) {
+            infoElement.dataset.tooltip = title;
+            infoElement.setAttribute("aria-label", title);
+        };
+    };
+
+    for (const button of document.querySelectorAll(".lang-button")) {
+        button.classList.toggle("active", button.dataset.lang == lang);
+    };
+};
+
+function updateQualityPresets() {
+    const element = document.getElementById("maxQuality");
+    if (!element) {
+        return;
+    };
+
+    for (const preset of document.querySelectorAll(".quality-preset")) {
+        preset.classList.toggle("active", preset.dataset.quality == element.value);
     };
 };
 
 async function startDownload() {
 
-    const [tab] = await chrome.tabs.query({active: true});
+    const [tab] = await chrome.tabs.query({active: true, currentWindow: true});
 
     let requestData = {};
 
     let element = document.getElementById("maxQuality");
     if (element.value) {
-        requestData["best-height"] = Number(element.value);
+        const maxQuality = Number(element.value);
+        if (!Number.isNaN(maxQuality)) {
+            requestData["best-height"] = maxQuality;
+        };
     };
 
     element = document.getElementById("chooseSavedir");
@@ -161,6 +207,8 @@ async function startDownload() {
     await chrome.runtime.sendMessage({
         command: "startDownload",
         url: tab.url,
+        tabId: tab.id,
+        windowId: tab.windowId,
         requestData: requestData
     });
 };
@@ -189,41 +237,45 @@ function init() {
         element = document.getElementById(key);
         if (element) {
             element.value = _CONFIG.fields[key];
+            const eventName = (element.tagName == "SELECT") ? "change" : "input";
             element.addEventListener(
-                "input",
+                eventName,
                 function() {
                     const _element = document.getElementById(key);
                     _CONFIG.fields[_element.id] = _element.value;
                     window.localStorage.setItem("config", JSON.stringify(_CONFIG));
+                    if (_element.id == "maxQuality") {
+                        updateQualityPresets();
+                    };
                 }
             );
         };
     };
 
-
-    element = document.getElementById("langCode");
-    let option;
-    for (let key in translations) {
-
-        option = document.createElement("option");
-        option.value = key;
-        option.innerHTML = key;
-        if (key == _CONFIG.lang) {
-            option.selected = true;
-        };
-        element.appendChild(option);
+    for (const preset of document.querySelectorAll(".quality-preset")) {
+        preset.addEventListener(
+            "click",
+            function() {
+                const element = document.getElementById("maxQuality");
+                element.value = preset.dataset.quality;
+                _CONFIG.fields.maxQuality = element.value;
+                window.localStorage.setItem("config", JSON.stringify(_CONFIG));
+                updateQualityPresets();
+            }
+        );
     };
+    updateQualityPresets();
 
-    element.addEventListener(
-        "change",
-        function() {
-            const _element = document.getElementById("langCode");
-            _CONFIG.lang = _element.value;
-            window.localStorage.setItem("config", JSON.stringify(_CONFIG));
-            setLang();
-        }
-    );
-
+    for (const button of document.querySelectorAll(".lang-button")) {
+        button.addEventListener(
+            "click",
+            function() {
+                _CONFIG.lang = button.dataset.lang;
+                window.localStorage.setItem("config", JSON.stringify(_CONFIG));
+                setLang();
+            }
+        );
+    };
 
     element = document.getElementById("startDownload");
     element.addEventListener("click", startDownload);

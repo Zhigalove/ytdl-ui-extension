@@ -1,63 +1,73 @@
-# Расширение для удобной загрузки видео с множества площадок (YouTube и пр.) для chromium браузеров, основанное на `yt-dlp`.
+# ytdl-ui-extension
 
-> [!IMPORTANT]
-> Перед установкой убедитесь, что на ПК установлен `Python` версии 3.11 или выше и `ffmpeg`.
-> Для корректного скачивания с YouTube так же рекомендуется установить NodeJS или Deno.
+[Русская версия](README.ru.md)
 
-## Как использовать:
+Fork of ytdl7000 by NyashniyVladya. This version includes fixes/improvements made by me with assistance from Codex.
 
-1. Открыть командную строку
+`ytdl-ui-extension` is a Chromium extension fork of [`NyashniyVladya/ytdl7000`](https://github.com/NyashniyVladya/ytdl7000), a small `yt-dlp` based tool for downloading videos from YouTube and other video hosting sites.
 
-1. Запустить следующие команды:
-   ```cmd
-   python -m pip install -U "yt-dlp[default]" yt-dlp-ejs
-   ```
-   ```cmd
-   python -m pip cache purge
-   ```
-   ```cmd
-   python -m pip install -U https://github.com/NyashniyVladya/ytdl7000/archive/refs/heads/main.zip
-   ```
+This fork keeps the original `ytdl7000` package name, command name, and `ytdl7000:` browser protocol for compatibility with the upstream installer.
 
-1. По окончании установки появится папка `%userprofile%\\ytdl7000_ext` - установить её как расширение в вашем chromium браузере (инструкция ниже)
-1. На странице с нужным видео/каналом/плейлистом нажать на иконку расширения и выбрать нужные опции загрузки
+## What changed
 
-### Как установить расширение в chromium:
+- The extension opens the downloader from the current tab context instead of creating a minimized background Chrome window.
+- The popup UI was redesigned with a compact dark theme.
+- The language is detected automatically from Chrome/system settings, with a small EN/RU switch in the popup.
+- The maximum resolution can be entered manually and selected from quick presets.
+- The extension icon was replaced with a clearer download icon.
+- Popup labels and tooltips were adjusted for readability.
 
-1. Открыть в браузере адрес `chrome://extensions` (в Яндекс браузере `browser://extensions`)
-1. Включить в правом верхнем углу режим разработчика
-1. Выбрать пункт "Загрузить распакованное расширение"
-1. Указать папку `%userprofile%\\ytdl7000_ext`
+## Requirements
 
---------------------------
+- Python 3.11 or newer
+- `ffmpeg`
+- A Chromium-based browser
+- `yt-dlp`
 
-# Extension for easy downloading videos from many video hostings (e.g. YouTube, etc.) for chromium browsers, based on 'yt-dlp'.
+For better YouTube support, Node.js or Deno is also recommended.
 
-> [!IMPORTANT]
-> Before installing, make sure that your PC has `Python` 3.11 or higher and `ffmpeg`.
-> To download correctly from YouTube, it is also recommended to install NodeJS or Deno.
+## Installation
 
-## How to use it:
+Open a terminal and run:
 
-1. Launch the command prompt
+```cmd
+python -m pip install -U "yt-dlp[default]" yt-dlp-ejs
+```
 
-1. Run the following commands:
-   ```cmd
-   python -m pip install -U "yt-dlp[default]" yt-dlp-ejs
-   ```
-   ```cmd
-   python -m pip cache purge
-   ```
-   ```cmd
-   python -m pip install -U https://github.com/NyashniyVladya/ytdl7000/archive/refs/heads/main.zip
-   ```
+```cmd
+python -m pip cache purge
+```
 
-1. After the installation is complete, the folder `%userprofile%\\ytdl7000_ext` will appear - install it as an extension in your chromium browser (instructions below)
-1. On the page with the desired video/channel/playlist, click on the extension icon and select the desired download options
+Install this fork from GitHub:
 
-### How to install an extension in chromium:
+```cmd
+python -m pip install -U https://github.com/Zhigalove/ytdl-ui-extension/archive/refs/heads/main.zip
+```
 
-1. Open the address `chrome://extensions` (in Yandex browser `browser://extensions`)
-1. Enable developer mode in the upper-right corner
-1. Select "Download Unpacked extension" button
-1. Choose `%userprofile%\\ytdl7000_ext` folder
+After installation, the extension folder should appear at:
+
+```cmd
+%userprofile%\ytdl7000_ext
+```
+
+Load it as an unpacked extension in your Chromium browser.
+
+## Load The Extension
+
+1. Open `chrome://extensions` in Chrome or `browser://extensions` in Yandex Browser.
+2. Enable Developer mode.
+3. Click "Load unpacked".
+4. Select `%userprofile%\ytdl7000_ext`.
+
+## Usage
+
+1. Open a page with a video, channel, or playlist.
+2. Click the extension icon.
+3. Choose download options.
+4. Click "Start download".
+
+## License
+
+This project keeps the original MIT license and copyright notice.
+
+Original project: [`NyashniyVladya/ytdl7000`](https://github.com/NyashniyVladya/ytdl7000)

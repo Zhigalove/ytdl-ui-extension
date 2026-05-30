@@ -7,7 +7,26 @@ function randInt(minValue, maxValue) {
     return Math.round((minValue + (Math.random() * (maxValue - minValue))));
 };
 
-async function _main(url, requestData) {
+async function openYtdlUri(uri, tabId, windowId) {
+    if (tabId !== undefined) {
+        try {
+            await chrome.tabs.update(tabId, {url: uri});
+            return null;
+        } catch (ex) {
+            console.error(ex);
+        };
+    };
+
+    const createProperties = {url: uri, active: true};
+    if (windowId !== undefined) {
+        createProperties.windowId = windowId;
+    };
+
+    const tab = await chrome.tabs.create(createProperties);
+    return tab.id;
+};
+
+async function _main(url, requestData, tabId, windowId) {
 
     console.debug(`Download from URL: ${url}`);
     console.debug(`Request data: ${JSON.stringify(requestData)}`);
@@ -19,9 +38,7 @@ async function _main(url, requestData) {
     const localURL = new URL(`http://localhost:${port}`);
 
     console.debug("Open URI scheme");
-    const startWindow = await chrome.windows.create(
-        {url: _uri, focused: false, state: "minimized"}
-    );
+    const startTabId = await openYtdlUri(_uri, tabId, windowId);
 
     let _attempt = 0;
     while (true) {
@@ -48,12 +65,14 @@ async function _main(url, requestData) {
         };
         await sleep((_attempt * 1000));
     };
-    console.debug("Close window");
-    try {
-        await chrome.windows.remove(startWindow.id);
-    } catch (ex) {
-        // If user close window.
-        console.error(ex);
+    if (startTabId !== null) {
+        console.debug("Close tab");
+        try {
+            await chrome.tabs.remove(startTabId);
+        } catch (ex) {
+            // If user close tab.
+            console.error(ex);
+        };
     };
     console.debug("Done");
 };
@@ -62,7 +81,7 @@ async function _main(url, requestData) {
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.command == "startDownload") {
         console.debug("Start main script");
-        _main(message.url, message.requestData);
+        _main(message.url, message.requestData, message.tabId, message.windowId);
         console.debug("End listener");
     };
 });

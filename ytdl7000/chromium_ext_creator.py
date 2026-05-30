@@ -27,7 +27,14 @@ def create_manifest():
         "version": _version,
         "description": "Chromium ext for download videos from websites",
         "action": {
-            "default_popup": "popup.html"
+            "default_popup": "popup.html",
+            "default_icon": {
+                "16": "icons/icon16.png",
+                "24": "icons/icon24.png",
+                "32": "icons/icon32.png",
+                "48": "icons/icon48.png",
+                "128": "icons/icon128.png"
+            }
         },
         "background": {
             "service_worker": "service_worker.js",
@@ -39,6 +46,8 @@ def create_manifest():
         ],
         "icons": {
             "16": "icons/icon16.png",
+            "24": "icons/icon24.png",
+            "32": "icons/icon32.png",
             "48": "icons/icon48.png",
             "128": "icons/icon128.png",
             "256": "icons/icon256.png",
