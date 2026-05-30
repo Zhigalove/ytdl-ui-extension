@@ -2,18 +2,18 @@
 
 [Русская версия](README.ru.md)
 
-Fork of ytdl7000 by NyashniyVladya. This version includes fixes/improvements made by me with assistance from Codex.
+`ytdl-ui-extension` is an unofficial Chromium extension fork of [`NyashniyVladya/ytdl7000`](https://github.com/NyashniyVladya/ytdl7000), a small `yt-dlp` based tool for downloading videos from YouTube and other video hosting sites.
 
-`ytdl-ui-extension` is a Chromium extension fork of [`NyashniyVladya/ytdl7000`](https://github.com/NyashniyVladya/ytdl7000), a small `yt-dlp` based tool for downloading videos from YouTube and other video hosting sites.
+This fork is not affiliated with the original ytdl7000 author.
 
 This fork keeps the original `ytdl7000` package name, command name, and `ytdl7000:` browser protocol for compatibility with the upstream installer.
 
-## What changed
+## Features of this fork
 
 - The extension opens the downloader from the current tab context instead of creating a minimized background Chrome window.
 - The popup UI was redesigned with a compact dark theme.
 - The language is detected automatically from Chrome/system settings, with a small EN/RU switch in the popup.
-- The maximum resolution can be entered manually and selected from quick presets.
+- The maximum resolution can be entered manually or selected from quick presets.
 - The extension icon was replaced with a clearer download icon.
 - Popup labels and tooltips were adjusted for readability.
 
@@ -52,7 +52,7 @@ After installation, the extension folder should appear at:
 
 Load it as an unpacked extension in your Chromium browser.
 
-## Load The Extension
+## Load the extension
 
 1. Open `chrome://extensions` in Chrome or `browser://extensions` in Yandex Browser.
 2. Enable Developer mode.
@@ -66,8 +66,12 @@ Load it as an unpacked extension in your Chromium browser.
 3. Choose download options.
 4. Click "Start download".
 
+## Credits
+
+- Original project: [`NyashniyVladya/ytdl7000`](https://github.com/NyashniyVladya/ytdl7000)
+- Fork of ytdl7000 by NyashniyVladya. This version includes fixes/improvements made by me.
+- Some changes were made with assistance from Codex and manually reviewed.
+
 ## License
 
 This project keeps the original MIT license and copyright notice.
-
-Original project: [`NyashniyVladya/ytdl7000`](https://github.com/NyashniyVladya/ytdl7000)

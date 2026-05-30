@@ -2,13 +2,13 @@
 
 [English version](README.md)
 
-Fork of ytdl7000 by NyashniyVladya. This version includes fixes/improvements made by me with assistance from Codex.
+`ytdl-ui-extension` — это неофициальный форк Chromium-расширения [`NyashniyVladya/ytdl7000`](https://github.com/NyashniyVladya/ytdl7000), небольшого инструмента на базе `yt-dlp` для скачивания видео с YouTube и других видеохостингов.
 
-`ytdl-ui-extension` — это форк Chromium-расширения [`NyashniyVladya/ytdl7000`](https://github.com/NyashniyVladya/ytdl7000), небольшого инструмента на базе `yt-dlp` для скачивания видео с YouTube и других видеохостингов.
+Этот форк не связан с автором оригинального ytdl7000.
 
 В этом форке сохранены оригинальные имя Python-пакета, команда и браузерный протокол `ytdl7000:`. Это сделано специально, чтобы не ломать совместимость с установщиком и существующим механизмом запуска.
 
-## Что изменено
+## Особенности этой версии
 
 - Расширение запускает загрузчик из контекста текущей вкладки, а не через отдельное свернутое окно Chrome.
 - Попап переработан: компактная темная тема, более понятная структура настроек.
@@ -21,7 +21,7 @@ Fork of ytdl7000 by NyashniyVladya. This version includes fixes/improvements mad
 
 - Python 3.11 или новее
 - `ffmpeg`
-- Chromium-based браузер
+- браузер на базе Chromium
 - `yt-dlp`
 
 Для более корректной загрузки с YouTube также рекомендуется установить Node.js или Deno.
@@ -66,8 +66,12 @@ python -m pip install -U https://github.com/Zhigalove/ytdl-ui-extension/archive/
 3. Выберите параметры загрузки.
 4. Нажмите "Начать загрузку".
 
+## Благодарности
+
+- Оригинальный проект: [`NyashniyVladya/ytdl7000`](https://github.com/NyashniyVladya/ytdl7000)
+- Это форк ytdl7000 от NyashniyVladya. В этой версии есть исправления и улучшения, сделанные мной.
+- Некоторые изменения были сделаны с помощью Codex и вручную проверены.
+
 ## Лицензия
 
 Проект сохраняет оригинальную MIT-лицензию и copyright автора.
-
-Оригинальный проект: [`NyashniyVladya/ytdl7000`](https://github.com/NyashniyVladya/ytdl7000)
