@@ -3,7 +3,7 @@ import * as translations from "./translations.js";
 
 let _CONFIG = {
     lang: null,
-    version: 10,
+    version: 11,
     checkBoxes: {
         chooseSavedir: false,
         loadFullPlaylist: false,
@@ -19,6 +19,7 @@ let _CONFIG = {
         maxQuality: "2160",
         restartAttempts: "5",
         playlistItems: "",
+        savedirPath: "",
         proxyParam: ""
     }
 };
@@ -68,6 +69,11 @@ function setLang() {
         };
     };
 
+    const savedirPath = document.getElementById("savedirPath");
+    if (savedirPath) {
+        savedirPath.placeholder = translations[lang].savedirPathPlaceholder;
+    };
+
     for (const [elementId, titleKey] of [
         ["useSponsorBlockInfo", "useSponsorBlockTitle"],
         ["playlistItemsInfo", "playlistItemsTitle"]
@@ -113,6 +119,11 @@ async function startDownload() {
     element = document.getElementById("chooseSavedir");
     if (element.checked) {
         requestData["savedir"] = ":autoChoice:";
+    } else {
+        element = document.getElementById("savedirPath");
+        if (element.value.trim()) {
+            requestData["savedir"] = element.value.trim();
+        };
     };
 
     element = document.getElementById("loadFullPlaylist");

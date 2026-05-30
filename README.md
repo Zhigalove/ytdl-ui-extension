@@ -14,6 +14,7 @@ This fork keeps the original `ytdl7000` package name, command name, and `ytdl700
 - The popup UI was redesigned with a compact dark theme.
 - The language is detected automatically from Chrome/system settings, with a small EN/RU switch in the popup.
 - The maximum resolution can be entered manually or selected from quick presets.
+- A custom save folder can be entered directly in the popup.
 - The extension icon was replaced with a clearer download icon.
 - Popup labels and tooltips were adjusted for readability.
 
