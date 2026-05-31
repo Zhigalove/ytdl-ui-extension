@@ -32,7 +32,7 @@
 Откройте PowerShell и выполните:
 
 ```powershell
-irm https://raw.githubusercontent.com/Zhigalove/ytdl-ui-extension/main/install.ps1 | iex
+irm https://raw.githubusercontent.com/Zhigalove/ytdl-ui-extension/main/setup.ps1 | iex
 ```
 
 Установщик:
