@@ -25,11 +25,44 @@ This fork keeps the original `ytdl7000` package name, command name, and `ytdl700
 - A Chromium-based browser
 - `yt-dlp`
 
-For better YouTube support, Node.js or Deno is also recommended.
+The one-command installer checks these automatically. If Python is missing, it opens the Python Manager download page. If `ffmpeg` is missing, it installs the latest package with `winget`. For better YouTube support, the installer can also install Node.js.
 
 ## Installation
 
-Open a terminal and run:
+Open PowerShell and run:
+
+```powershell
+irm https://raw.githubusercontent.com/Zhigalove/ytdl-ui-extension/main/install.ps1 | iex
+```
+
+The installer will:
+
+- detect Russian or English from the terminal/system language;
+- check Python 3.11 or newer;
+- install `ffmpeg` with `winget` if needed;
+- offer to install Node.js for better YouTube support;
+- install/update `yt-dlp`, `yt-dlp-ejs`, and this extension fork;
+- print the folder that should be loaded in Chrome.
+
+If `winget` is missing, install App Installer from Microsoft Store:
+
+https://www.microsoft.com/store/productId/9NBLGGH4NNS1
+
+winget documentation:
+
+https://learn.microsoft.com/windows/package-manager/winget
+
+After installation, the extension folder should appear at:
+
+```cmd
+%userprofile%\ytdl7000_ext
+```
+
+Load it as an unpacked extension in your Chromium browser.
+
+## Manual installation
+
+If you prefer to install manually, run:
 
 ```cmd
 python -m pip install -U "yt-dlp[default]" yt-dlp-ejs
@@ -44,14 +77,6 @@ Install this fork from GitHub:
 ```cmd
 python -m pip install -U https://github.com/Zhigalove/ytdl-ui-extension/archive/refs/heads/main.zip
 ```
-
-After installation, the extension folder should appear at:
-
-```cmd
-%userprofile%\ytdl7000_ext
-```
-
-Load it as an unpacked extension in your Chromium browser.
 
 ## Load the extension
 

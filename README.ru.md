@@ -25,11 +25,44 @@
 - браузер на базе Chromium
 - `yt-dlp`
 
-Для более корректной загрузки с YouTube также рекомендуется установить Node.js или Deno.
+Установщик проверяет это автоматически. Если Python не найден, он откроет страницу загрузки Python Manager. Если не найден `ffmpeg`, установщик поставит последнюю версию через `winget`. Для более корректной загрузки с YouTube установщик также предложит поставить Node.js.
 
 ## Установка
 
-Откройте терминал и выполните:
+Откройте PowerShell и выполните:
+
+```powershell
+irm https://raw.githubusercontent.com/Zhigalove/ytdl-ui-extension/main/install.ps1 | iex
+```
+
+Установщик:
+
+- определит русский или английский язык по терминалу/системе;
+- проверит Python 3.11 или новее;
+- установит `ffmpeg` через `winget`, если он не найден;
+- предложит установить Node.js для более надежного скачивания с YouTube;
+- установит/обновит `yt-dlp`, `yt-dlp-ejs` и этот форк расширения;
+- покажет папку, которую нужно загрузить в Chrome.
+
+Если `winget` не найден, установите App Installer из Microsoft Store:
+
+https://www.microsoft.com/store/productId/9NBLGGH4NNS1
+
+Документация winget:
+
+https://learn.microsoft.com/windows/package-manager/winget
+
+После установки должна появиться папка расширения:
+
+```cmd
+%userprofile%\ytdl7000_ext
+```
+
+Ее нужно загрузить в браузер как распакованное расширение.
+
+## Ручная установка
+
+Если хотите установить вручную, выполните:
 
 ```cmd
 python -m pip install -U "yt-dlp[default]" yt-dlp-ejs
@@ -44,14 +77,6 @@ python -m pip cache purge
 ```cmd
 python -m pip install -U https://github.com/Zhigalove/ytdl-ui-extension/archive/refs/heads/main.zip
 ```
-
-После установки должна появиться папка расширения:
-
-```cmd
-%userprofile%\ytdl7000_ext
-```
-
-Ее нужно загрузить в браузер как распакованное расширение.
 
 ## Как загрузить расширение
 
