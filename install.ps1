@@ -1,4 +1,4 @@
-﻿param(
+param(
     [switch]$English,
     [switch]$Russian,
     [switch]$SkipNode,
@@ -134,6 +134,26 @@ function Invoke-Native($FilePath, [string[]]$Arguments) {
     }
 }
 
+function Invoke-Probe($FilePath, [string[]]$Arguments) {
+    $oldErrorActionPreference = $ErrorActionPreference
+    $ErrorActionPreference = "Continue"
+
+    try {
+        $output = & $FilePath @Arguments 2>&1
+        $exitCode = $LASTEXITCODE
+    } catch {
+        $output = @($_.Exception.Message)
+        $exitCode = 1
+    } finally {
+        $ErrorActionPreference = $oldErrorActionPreference
+    }
+
+    return [pscustomobject]@{
+        ExitCode = $exitCode
+        Output = @($output | ForEach-Object { $_.ToString() })
+    }
+}
+
 function Test-Command($Name) {
     return [bool](Get-Command $Name -ErrorAction SilentlyContinue)
 }
@@ -149,14 +169,20 @@ function Get-Python {
         if (-not (Test-Command $candidate.File)) { continue }
 
         $probeArgs = @($candidate.Args + @("-c", "import sys; print(sys.executable); print('{}.{}.{}'.format(*sys.version_info[:3]))"))
-        $output = & $candidate.File @probeArgs 2>$null
-        if ($LASTEXITCODE -ne 0 -or $output.Count -lt 2) { continue }
+        $probe = Invoke-Probe $candidate.File $probeArgs
+        if ($probe.ExitCode -ne 0 -or $probe.Output.Count -lt 2) { continue }
 
-        $version = [version]$output[1]
+        $executable = $probe.Output[0]
+        $versionText = $probe.Output[1]
+        $version = $null
+
+        if (-not [version]::TryParse($versionText, [ref]$version)) { continue }
+        if ($executable -like "*\Microsoft\WindowsApps\*") { continue }
+
         return [pscustomobject]@{
             File = $candidate.File
             PrefixArgs = $candidate.Args
-            Executable = $output[0]
+            Executable = $executable
             Version = $version
         }
     }
